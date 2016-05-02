@@ -8,12 +8,8 @@ import (
 const (
 	ErrNotEnoughValues    = "not enough latitude and longitude values given"
 	ErrInvalidCoordinates = "invalid latitude/longitude values"
+	ErrGettingTimes       = "unable to get journey times"
 )
-
-func main() {
-	http.HandleFunc("/times", timesHandler)
-	http.ListenAndServe(":8080", nil)
-}
 
 func timesHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO this could go into the 'NewRefPoints' function?
@@ -24,16 +20,34 @@ func timesHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(errorResponse{
 			Message: ErrNotEnoughValues,
 		})
+		return
 	}
-	_, err := NewJourney(start, end)
+	journey, err := NewJourney(start, end)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(errorResponse{
 			Message: ErrInvalidCoordinates,
 		})
+		return
 	}
+
+	err = journey.GetTimes()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(errorResponse{
+			Message: ErrGettingTimes,
+		})
+		return
+	}
+	json.NewEncoder(w).Encode(journeyResponse{
+		Times: journey.Times,
+	})
 }
 
 type errorResponse struct {
 	Message string `json:"message"`
+}
+
+type journeyResponse struct {
+	Times journeyTimes `json:"journey_times"`
 }
