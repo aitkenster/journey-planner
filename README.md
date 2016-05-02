@@ -37,7 +37,7 @@ Clone the repo into `$GOPATH/src/github.com/aitkenster/`
 ```
 cd journey-planner
 make build
-$GOPATH/bin/journey-planner
+./journey-planner
 ```
 
 Visit localhost:8080 in your browser to run a query. An example one, with the coordinates to get from Lands End to John O'Groats is:
