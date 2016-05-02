@@ -24,7 +24,7 @@ func TestValidateCoordinates(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		got := test.coords.AreValid()
+		got := test.coords.Valid()
 		if got != test.expected {
 			t.Errorf("expected %v for coords %v, got %v", test.expected, test.coords, got)
 		}
