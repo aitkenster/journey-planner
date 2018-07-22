@@ -4,7 +4,7 @@ Finds the travel time between two co-ordinates by car, bicycle and walking.
 
 ## Endpoint
 
-###/times
+### times
 
 Params:  `start` and `end`
 
